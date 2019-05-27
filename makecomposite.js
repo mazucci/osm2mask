@@ -1,12 +1,13 @@
+// Collection of images to include in the composite
 var moyale = ee.ImageCollection('users/mayzurb/moyale');
-//  .select(['b3', 'b2', 'b1']);
 
 // Temporally composite the images with a maximum value function.
 var composite = moyale.max();
 
+// Region (bounding box) to crop the composite
 var region = ee.Geometry.Rectangle([38.9460,3.3067, 39.1492,3.5463]);
 
-//calculate viz params
+// Calculate viz params
 var minmax = composite.reduceRegion({
   reducer: ee.Reducer.minMax(),
   geometry: region,
@@ -18,7 +19,7 @@ var stats = minmax.getInfo();
 var vizParams = {bands: ['b3', 'b2', 'b1'],
     max: [stats['b3_max'], stats['b2_max'], stats['b1_max']],
     min: [stats['b3_min'], stats['b2_min'], stats['b1_min']],
-    gamma: [1.3, 1.3, 1.3]
+    gamma: [1.5, 1.3, 1.3]
   
 };
 
