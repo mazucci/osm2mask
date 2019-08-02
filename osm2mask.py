@@ -7,6 +7,7 @@ work_dir = '/home/may/foss4glocal/'
 
 def osm2mask(road_layer_name, sat_layer_name, bbox, scale):
     """ road_layer_name: the name of the layer that contains roads from osm.
+        sat_layer_name: the name of the layer that contains the satellite image.
         bbox: a list containing the coordinates for the bounding box of the AOI.
         scale: the scale of the image to use e.g. (1, 3, 10, 20, 30)m
     """
@@ -42,11 +43,11 @@ def osm2mask(road_layer_name, sat_layer_name, bbox, scale):
             
     
     # clip road layer to bbox extent
-    processing.runalg('qgis:clip', layer, bbox_layer, '/home/may/foss4glocal/clipped.shp')
+    processing.runalg('qgis:clip', layer, bbox_layer, work_dir+'clipped.shp')
     clipped = QgsVectorLayer(work_dir+'clipped.shp', 'clipped', 'ogr')
     
     # reproject layer to work with meters
-    processing.runalg('qgis:reprojectlayer', clipped, 'EPSG:3857', '/home/may/foss4glocal/clipped_merc.shp')
+    processing.runalg('qgis:reprojectlayer', clipped, 'EPSG:3857', work_dir+'clipped_merc.shp')
     clipped = QgsVectorLayer(work_dir+'clipped_merc.shp', 'clipped_merc', 'ogr')
     # select wider highways
     query = "(lower(\"highway\")=lower('trunk')) \
